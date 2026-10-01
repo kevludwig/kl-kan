@@ -1,6 +1,39 @@
 import { createAuthEndpoint } from "better-auth/api";
 import { socialProviderList } from "better-auth/social-providers";
 
+// Tenant ID that Entra uses for personal Microsoft accounts (MSA)
+const MICROSOFT_PERSONAL_ACCOUNT_TENANT_ID =
+  "9188040d-6c67-4c5b-b112-36a304b66dad";
+const MICROSOFT_MULTI_TENANT_AUTHORITIES = ["common", "organizations"];
+
+/**
+ * In multi-tenant mode any Entra tenant can assert an arbitrary `email` claim
+ * ("nOAuth"). Only trust the email if Microsoft verified it: personal accounts,
+ * or work accounts whose tenant owns the email domain (`xms_edov` optional claim).
+ * Unverified emails are dropped so Better Auth rejects the sign-in.
+ */
+export function mapMicrosoftProfileToUser(
+  profile: Record<string, unknown>,
+  tenantId: string,
+): { emailVerified: boolean; email?: string } {
+  const edov = profile.xms_edov;
+  const isVerified =
+    profile.tid === MICROSOFT_PERSONAL_ACCOUNT_TENANT_ID ||
+    edov === true ||
+    edov === "true" ||
+    edov === 1 ||
+    edov === "1";
+
+  if (
+    !isVerified &&
+    MICROSOFT_MULTI_TENANT_AUTHORITIES.includes(tenantId.toLowerCase())
+  ) {
+    return { emailVerified: false, email: "" };
+  }
+
+  return { emailVerified: isVerified };
+}
+
 export const configuredProviders = socialProviderList.reduce<
   Record<
     string,
@@ -15,6 +48,9 @@ export const configuredProviders = socialProviderList.reduce<
       // Google-specific optional hints
       hostedDomain?: string;
       hd?: string;
+      mapProfileToUser?: (
+        profile: Record<string, unknown>,
+      ) => ReturnType<typeof mapMicrosoftProfileToUser>;
     }
   >
 >((acc, provider) => {
@@ -50,9 +86,12 @@ export const configuredProviders = socialProviderList.reduce<
     acc[provider]
   ) {
     const tenantId = process.env.MICROSOFT_TENANT_ID;
-    acc[provider].tenantId =
+    const resolvedTenantId =
       tenantId && tenantId.length > 0 ? tenantId : "common";
+    acc[provider].tenantId = resolvedTenantId;
     acc[provider].requireSelectAccount = true;
+    acc[provider].mapProfileToUser = (profile) =>
+      mapMicrosoftProfileToUser(profile, resolvedTenantId);
   }
   // Add Google domain hint if allowed domains is configured
   if (
