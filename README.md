@@ -181,6 +181,10 @@ pnpm dev
 | `SMTP_PASSWORD`                           | SMTP password/token                                       | No                                          | `re_xxxx`                                                   |
 | `SMTP_SECURE`                             | Use secure SMTP connection (defaults to true if not set)  | For Email                                   | `true`                                                      |
 | `SMTP_REJECT_UNAUTHORIZED`                | Reject invalid certificates (defaults to true if not set) | For Email                                   | `false`                                                     |
+| `EMAIL_PROVIDER`                          | Email transport: `smtp` (default) or `graph`              | No                                          | `graph`                                                     |
+| `EMAIL_GRAPH_TENANT_ID`                   | Entra tenant ID of the `EMAIL_FROM` mailbox               | For Graph email                             | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`                      |
+| `EMAIL_GRAPH_CLIENT_ID`                   | App with `Mail.Send` (defaults to `MICROSOFT_CLIENT_ID`)  | No                                          | `xxx`                                                       |
+| `EMAIL_GRAPH_CLIENT_SECRET`               | Client secret (defaults to `MICROSOFT_CLIENT_SECRET`)     | No                                          | `xxx`                                                       |
 | `NEXT_PUBLIC_DISABLE_EMAIL`               | To disable all email features                             | For Email                                   | `true`                                                      |
 | `NEXT_PUBLIC_BASE_URL`                    | Base URL of your installation                             | Yes                                         | `http://localhost:3000`                                     |
 | `NEXT_API_BODY_SIZE_LIMIT`                | Maximum API request body size (defaults to 1mb)           | No                                          | `50mb`                                                      |

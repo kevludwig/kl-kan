@@ -80,6 +80,10 @@ export const env = createEnv({
     S3_ENDPOINT: z.string().optional(),
     S3_FORCE_PATH_STYLE: z.string().optional(),
     EMAIL_FROM: z.string().optional(),
+    EMAIL_PROVIDER: z.enum(["smtp", "graph"]).optional().or(z.literal("")),
+    EMAIL_GRAPH_TENANT_ID: z.string().optional(),
+    EMAIL_GRAPH_CLIENT_ID: z.string().optional(),
+    EMAIL_GRAPH_CLIENT_SECRET: z.string().optional(),
     REDIS_URL: z.string().url().optional().or(z.literal("")),
   },
 

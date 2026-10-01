@@ -4,6 +4,7 @@ import { createLogger } from "@kan/logger";
 
 const log = createLogger("email");
 
+import { isGraphEmailEnabled, sendGraphEmail } from "./graph";
 import JoinWorkspaceTemplate from "./templates/join-workspace";
 import MagicLinkTemplate from "./templates/magic-link";
 import MentionTemplate from "./templates/mention";
@@ -59,6 +60,12 @@ export const sendEmail = async (
       subject,
       html,
     };
+
+    if (isGraphEmailEnabled()) {
+      await sendGraphEmail({ ...options, from: options.from ?? "" });
+      log.info({ to, subject, template }, "Email sent via Microsoft Graph");
+      return;
+    }
 
     const response = await transporter.sendMail(options);
 
