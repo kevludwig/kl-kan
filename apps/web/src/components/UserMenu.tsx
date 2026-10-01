@@ -13,6 +13,7 @@ import { env } from "~/env";
 import { useIsMobile } from "~/hooks/useMediaQuery";
 import { useKeyboardShortcuts } from "~/providers/keyboard-shortcuts";
 import { useModal } from "~/providers/modal";
+import { getSourceUrl, getSupportUrl, isWhiteLabel } from "~/utils/brand";
 import { getAvatarUrl } from "~/utils/helpers";
 
 interface UserMenuProps {
@@ -77,7 +78,7 @@ export default function UserMenu({
         ) : (
           <Menu.Button
             className="flex w-full items-center rounded-md p-1.5 text-neutral-900 hover:bg-light-200 dark:text-dark-900 dark:hover:bg-dark-200 dark:hover:text-dark-1000"
-            title={isCollapsed ? (displayName || email) : undefined}
+            title={isCollapsed ? displayName || email : undefined}
           >
             {avatarUrl ? (
               <Image
@@ -189,7 +190,7 @@ export default function UserMenu({
               </Menu.Item>
               <Menu.Item>
                 <Link
-                  href="mailto:support@kan.bn"
+                  href={getSupportUrl()}
                   target="_blank"
                   rel="noreferrer"
                   onClick={handleLinkClick}
@@ -198,17 +199,32 @@ export default function UserMenu({
                   {t`Support`}
                 </Link>
               </Menu.Item>
-              <Menu.Item>
-                <Link
-                  href="https://docs.kan.bn"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={handleLinkClick}
-                  className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
-                >
-                  {t`Documentation`}
-                </Link>
-              </Menu.Item>
+              {!isWhiteLabel() && (
+                <Menu.Item>
+                  <Link
+                    href="https://docs.kan.bn"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={handleLinkClick}
+                    className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
+                  >
+                    {t`Documentation`}
+                  </Link>
+                </Menu.Item>
+              )}
+              {getSourceUrl() && (
+                <Menu.Item>
+                  <Link
+                    href={getSourceUrl() ?? ""}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={handleLinkClick}
+                    className="flex w-full items-center rounded-[5px] px-3 py-2 text-left text-xs hover:bg-light-200 dark:hover:bg-dark-400"
+                  >
+                    {t`Source code`}
+                  </Link>
+                </Menu.Item>
+              )}
               <Menu.Item>
                 <button
                   onClick={() => handleModalOpen("NEW_FEEDBACK")}

@@ -110,6 +110,11 @@ export const env = createEnv({
       )
       .optional(),
     NEXT_PUBLIC_APP_VERSION: z.string().optional(),
+    NEXT_PUBLIC_APP_NAME: z.string().optional(),
+    NEXT_PUBLIC_LOGO_URL: z.string().optional(),
+    NEXT_PUBLIC_LOGO_DARK_URL: z.string().optional(),
+    NEXT_PUBLIC_SUPPORT_URL: z.string().optional(),
+    NEXT_PUBLIC_SOURCE_URL: z.string().optional(),
     NEXT_PUBLIC_ALLOW_CREDENTIALS: z
       .string()
       .transform((s) => (s === "" ? undefined : s))
@@ -150,6 +155,11 @@ export const env = createEnv({
     NEXT_PUBLIC_USE_VIRTUAL_HOSTED_URLS:
       process.env.NEXT_PUBLIC_USE_VIRTUAL_HOSTED_URLS,
     NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION,
+    NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
+    NEXT_PUBLIC_LOGO_URL: process.env.NEXT_PUBLIC_LOGO_URL,
+    NEXT_PUBLIC_LOGO_DARK_URL: process.env.NEXT_PUBLIC_LOGO_DARK_URL,
+    NEXT_PUBLIC_SUPPORT_URL: process.env.NEXT_PUBLIC_SUPPORT_URL,
+    NEXT_PUBLIC_SOURCE_URL: process.env.NEXT_PUBLIC_SOURCE_URL,
     NEXT_PUBLIC_ALLOW_CREDENTIALS: process.env.NEXT_PUBLIC_ALLOW_CREDENTIALS,
     NEXT_PUBLIC_DISABLE_SIGN_UP: process.env.NEXT_PUBLIC_DISABLE_SIGN_UP,
     NEXT_PUBLIC_USE_STANDALONE_OUTPUT:
