@@ -1,11 +1,11 @@
 {
-  "background_color": "#000000",
+  "background_color": "#f3f4f1",
   "categories": [
     "business",
     "productivity",
     "utilities"
   ],
-  "description": "The open source Trello alternative.",
+  "description": "Projekte und Aufgaben mit Kevin Ludwig.",
   "display": "standalone",
   "icons": [
     {
@@ -16,24 +16,10 @@
     }
   ],
   "id": "/",
-  "screenshots": [
-    {
-      "sizes": "1624x1561",
-      "src": "/screenshot-wide.png",
-      "type": "image/png",
-      "form_factor": "wide"
-    },
-    {
-      "sizes": "1290x2796",
-      "src": "/screenshot-narrow.png",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
   "orientation": "portrait-primary",
-  "name": "Kan.bn | The open source alternative to Trello",
+  "name": "KL Projects",
   "scope": "/",
-  "short_name": "Kan.bn",
+  "short_name": "KL Projects",
   "start_url": "/",
-  "theme_color": "#000000"
+  "theme_color": "#0e1a2b"
 }

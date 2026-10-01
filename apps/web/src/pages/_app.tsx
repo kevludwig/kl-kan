@@ -4,7 +4,7 @@ import "~/utils/i18n";
 import type { NextPage, Viewport } from "next";
 import type { AppProps, AppType } from "next/app";
 import type { ReactElement, ReactNode } from "react";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
 import { env } from "next-runtime-env";
 import { ThemeProvider } from "next-themes";
@@ -19,14 +19,22 @@ import { ModalProvider } from "~/providers/modal";
 import { PopupProvider } from "~/providers/popup";
 import { api } from "~/utils/api";
 
-const jakarta = Plus_Jakarta_Sans({
+const plex = IBM_Plex_Sans({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  display: "swap",
+  variable: "--font-bricolage",
+});
+
 export const metadata = {
-  title: "Kan",
-  description: "The open source Trello alternative",
+  title: "KL Projects",
+  description: "Projekte und Aufgaben mit Kevin Ludwig",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
@@ -67,7 +75,7 @@ const MyApp: AppType = ({ Component, pageProps }: AppPropsWithLayout) => {
     <>
       <style jsx global>{`
         html {
-          font-family: ${jakarta.style.fontFamily};
+          font-family: ${plex.style.fontFamily};
         }
         body {
           position: relative;
@@ -81,7 +89,7 @@ const MyApp: AppType = ({ Component, pageProps }: AppPropsWithLayout) => {
         />
       )}
       <script src="/__ENV.js" />
-      <main className="font-sans">
+      <main className={`font-sans ${bricolage.variable}`}>
         <KeyboardShortcutProvider>
           <LinguiProviderWrapper>
             <FontSizeProvider>

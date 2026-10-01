@@ -3,11 +3,13 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 
 import baseConfig from "@kan/tailwind-config/web";
 
+import brandPreset from "./brand.preset";
+
 export default {
   darkMode: "class",
   content: [...baseConfig.content],
   plugins: [require("@tailwindcss/typography")],
-  presets: [baseConfig],
+  presets: [baseConfig, brandPreset],
   theme: {
     extend: {
       fontFamily: {
