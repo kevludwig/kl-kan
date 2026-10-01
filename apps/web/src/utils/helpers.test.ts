@@ -41,11 +41,6 @@ describe("getAvatarUrl", () => {
     );
   });
 
-  it("returns data URI unchanged (e.g. Microsoft profile photo)", () => {
-    const dataUri = "data:image/jpeg;base64, /9j/4AAQSkZJRg==";
-    expect(getAvatarUrl(dataUri)).toBe(dataUri);
-  });
-
   describe("path-style URLs (MinIO/LocalStack)", () => {
     it("constructs path-style URL when STORAGE_DOMAIN is not set", () => {
       mockEnv.mockImplementation((key: string) => {

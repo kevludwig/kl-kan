@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import { createS3Client, generateAvatarUrl } from "./s3";
+import { createS3Client } from "./s3";
 
 const originalS3Region = process.env.S3_REGION;
 
@@ -38,18 +38,5 @@ describe("createS3Client", () => {
 
     await expect(client.config.region()).resolves.toBe("eu-west-1");
     client.destroy();
-  });
-});
-
-describe("generateAvatarUrl", () => {
-  it("returns absolute URLs unchanged", async () => {
-    await expect(
-      generateAvatarUrl("https://example.com/avatar.jpg"),
-    ).resolves.toBe("https://example.com/avatar.jpg");
-  });
-
-  it("returns data URIs unchanged (e.g. Microsoft profile photo)", async () => {
-    const dataUri = "data:image/jpeg;base64, /9j/4AAQSkZJRg==";
-    await expect(generateAvatarUrl(dataUri)).resolves.toBe(dataUri);
   });
 });

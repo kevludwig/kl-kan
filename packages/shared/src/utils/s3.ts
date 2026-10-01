@@ -79,7 +79,7 @@ export async function deleteObject(bucket: string, key: string) {
 
 /**
  * Generate presigned URL for an avatar image
- * Returns the URL as-is if it's already a full URL or data URI (external provider)
+ * Returns the URL as-is if it's already a full URL (external provider)
  * Returns presigned URL if it's an S3 key
  * Returns null if image key is missing, bucket is not configured, or URL generation fails
  */
@@ -91,11 +91,7 @@ export async function generateAvatarUrl(
     return null;
   }
 
-  if (
-    imageKey.startsWith("http://") ||
-    imageKey.startsWith("https://") ||
-    imageKey.startsWith("data:image/")
-  ) {
+  if (imageKey.startsWith("http://") || imageKey.startsWith("https://")) {
     return imageKey;
   }
 
