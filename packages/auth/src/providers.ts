@@ -48,6 +48,7 @@ export const configuredProviders = socialProviderList.reduce<
       // Google-specific optional hints
       hostedDomain?: string;
       hd?: string;
+      disableProfilePhoto?: boolean;
       mapProfileToUser?: (
         profile: Record<string, unknown>,
       ) => ReturnType<typeof mapMicrosoftProfileToUser>;
@@ -90,6 +91,9 @@ export const configuredProviders = socialProviderList.reduce<
       tenantId && tenantId.length > 0 ? tenantId : "common";
     acc[provider].tenantId = resolvedTenantId;
     acc[provider].requireSelectAccount = true;
+    // The photo is returned as a multi-KB data URI, which exceeds user.image
+    // (varchar 255) and makes sign-up fail with unable_to_create_user.
+    acc[provider].disableProfilePhoto = true;
     acc[provider].mapProfileToUser = (profile) =>
       mapMicrosoftProfileToUser(profile, resolvedTenantId);
   }
