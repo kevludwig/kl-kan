@@ -140,6 +140,31 @@ export function createDatabaseHooks(db: dbClient) {
         },
       },
     },
+    session: {
+      create: {
+        // Invited users who sign in via OAuth never hit the magic link
+        // callback, so accept their pending invitations on sign-in.
+        async after(session: { userId: string }, _context: unknown) {
+          try {
+            const accepted = await memberRepo.acceptPendingInvitesForUser(
+              db,
+              session.userId,
+            );
+            if (accepted.length > 0) {
+              log.info(
+                { userId: session.userId, count: accepted.length },
+                "Accepted pending invitations on sign-in",
+              );
+            }
+          } catch (error) {
+            log.error(
+              { err: error, userId: session.userId },
+              "Error accepting pending invitations",
+            );
+          }
+        },
+      },
+    },
   };
 }
 

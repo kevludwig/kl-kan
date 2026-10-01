@@ -1,8 +1,8 @@
-import { and, count, eq, isNull, ne, or } from "drizzle-orm";
+import { and, count, eq, isNull, ne, or, sql } from "drizzle-orm";
 
 import type { dbClient } from "@kan/db/client";
 import type { MemberRole, MemberStatus } from "@kan/db/schema";
-import { workspaceMembers } from "@kan/db/schema";
+import { users, workspaceMembers } from "@kan/db/schema";
 import { generateUID } from "@kan/shared/utils";
 
 export const getActiveCount = async (db: dbClient) => {
@@ -121,7 +121,7 @@ export const getByEmailAndStatus = async (
 ) => {
   return db.query.workspaceMembers.findFirst({
     where: and(
-      eq(workspaceMembers.email, email),
+      eq(sql`lower(${workspaceMembers.email})`, email.toLowerCase()),
       eq(workspaceMembers.status, status),
       isNull(workspaceMembers.deletedAt),
     ),
@@ -142,6 +142,37 @@ export const acceptInvite = async (
     });
 
   return result;
+};
+
+/**
+ * Accepts all pending invitations addressed to the user's email, but only if
+ * the email is verified (magic link or a provider that verified it).
+ */
+export const acceptPendingInvitesForUser = async (
+  db: dbClient,
+  userId: string,
+) => {
+  return db
+    .update(workspaceMembers)
+    .set({ status: "active", userId })
+    .from(users)
+    .where(
+      and(
+        eq(users.id, userId),
+        eq(users.emailVerified, true),
+        eq(sql`lower(${workspaceMembers.email})`, sql`lower(${users.email})`),
+        eq(workspaceMembers.status, "invited"),
+        isNull(workspaceMembers.deletedAt),
+        or(
+          isNull(workspaceMembers.userId),
+          eq(workspaceMembers.userId, userId),
+        ),
+      ),
+    )
+    .returning({
+      id: workspaceMembers.id,
+      publicId: workspaceMembers.publicId,
+    });
 };
 
 export const softDelete = async (

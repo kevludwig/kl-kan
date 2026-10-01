@@ -13,6 +13,7 @@ vi.mock("@kan/db/repository/member.repo", () => ({
   getByEmailAndStatus: vi.fn(),
   getByPublicId: vi.fn(),
   acceptInvite: vi.fn(),
+  acceptPendingInvitesForUser: vi.fn(),
 }));
 
 vi.mock("@kan/db/repository/user.repo", () => ({
@@ -36,6 +37,9 @@ const mockEnv = env as ReturnType<typeof vi.fn>;
 const mockGetByEmailAndStatus = memberRepo.getByEmailAndStatus as ReturnType<
   typeof vi.fn
 >;
+
+const mockAcceptPendingInvitesForUser =
+  memberRepo.acceptPendingInvitesForUser as ReturnType<typeof vi.fn>;
 
 const db = {} as Parameters<typeof createDatabaseHooks>[0];
 
@@ -188,6 +192,29 @@ describe("createDatabaseHooks", () => {
       expect(result).toBe(true);
 
       delete process.env.BETTER_AUTH_ALLOWED_DOMAINS;
+    });
+  });
+
+  describe("session.create.after", () => {
+    it("accepts pending invitations for the signed-in user", async () => {
+      mockAcceptPendingInvitesForUser.mockResolvedValue([
+        { id: 1, publicId: "member-1" },
+      ]);
+
+      await hooks.session.create.after({ userId: "user-1" }, {});
+
+      expect(mockAcceptPendingInvitesForUser).toHaveBeenCalledWith(
+        db,
+        "user-1",
+      );
+    });
+
+    it("does not fail sign-in when accepting invitations throws", async () => {
+      mockAcceptPendingInvitesForUser.mockRejectedValue(new Error("db down"));
+
+      await expect(
+        hooks.session.create.after({ userId: "user-1" }, {}),
+      ).resolves.toBeUndefined();
     });
   });
 });
