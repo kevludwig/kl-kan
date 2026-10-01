@@ -49,7 +49,9 @@ export const configuredProviders = socialProviderList.reduce<
     Object.keys(acc).includes("microsoft") &&
     acc[provider]
   ) {
-    acc[provider].tenantId = "common";
+    const tenantId = process.env.MICROSOFT_TENANT_ID;
+    acc[provider].tenantId =
+      tenantId && tenantId.length > 0 ? tenantId : "common";
     acc[provider].requireSelectAccount = true;
   }
   // Add Google domain hint if allowed domains is configured

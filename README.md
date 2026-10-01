@@ -193,6 +193,9 @@ pnpm dev
 | `DISCORD_CLIENT_SECRET`                   | Discord OAuth client secret                               | For Discord login                           | `xxx`                                                       |
 | `GITHUB_CLIENT_ID`                        | GitHub OAuth client ID                                    | For GitHub login                            | `xxx`                                                       |
 | `GITHUB_CLIENT_SECRET`                    | GitHub OAuth client secret                                | For GitHub login                            | `xxx`                                                       |
+| `MICROSOFT_CLIENT_ID`                     | Microsoft Entra ID application (client) ID                | For Microsoft login                         | `xxx`                                                       |
+| `MICROSOFT_CLIENT_SECRET`                 | Microsoft Entra ID client secret                          | For Microsoft login                         | `xxx`                                                       |
+| `MICROSOFT_TENANT_ID`                     | Entra tenant to sign in against (defaults to `common`)    | No                                          | `common`, `organizations` or tenant ID                      |
 | `OIDC_CLIENT_ID`                          | Generic OIDC client ID                                    | For OIDC login                              | `xxx`                                                       |
 | `OIDC_CLIENT_SECRET`                      | Generic OIDC client secret                                | For OIDC login                              | `xxx`                                                       |
 | `OIDC_DISCOVERY_URL`                      | OIDC discovery URL                                        | For OIDC login                              | `https://auth.example.com/.well-known/openid-configuration` |
